@@ -1,7 +1,6 @@
 package com.github.aakumykov.list_holding_list_adapter
 
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +18,14 @@ abstract class ListHoldingListAdapter<T, V: ListHoldingListAdapter.ViewHolder<T>
     private val list: MutableList<T> = mutableListOf()
     private var selectedItem: T? = null
 
-    fun setSelectedItem(item: T) {
-        Log.d(TAG, "setSelectedItem(${item})")
-        selectedItem = item
-    }
 
     abstract fun createViewHolder(): ViewHolder<T>
+
+
+    fun setSelectedItem(item: T) {
+        selectedItem = item
+        notifyDataSetChanged()
+    }
 
 
     fun setList(newList: List<T>) {
@@ -39,15 +40,18 @@ abstract class ListHoldingListAdapter<T, V: ListHoldingListAdapter.ViewHolder<T>
         notifyDataSetChanged()
     }
 
+
     fun addItem(item: T) {
         list.add(item)
         notifyDataSetChanged()
     }
 
+
     fun removeItem(item: T) {
         list.remove(item)
         notifyDataSetChanged()
     }
+
 
     fun removeItemAt(position: Int) {
         list.removeAt(position)
@@ -69,17 +73,20 @@ abstract class ListHoldingListAdapter<T, V: ListHoldingListAdapter.ViewHolder<T>
         return list[position].hashCode().toLong()
     }
 
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         return getViewFromResource(itemLayoutResourceId, position, convertView, parent) { viewHolder, item ->
             viewHolder.fill(item, item == selectedItem)
         }
     }
 
+
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
         return getViewFromResource(itemLayoutResourceId, position, convertView, parent) { viewHolder, item ->
             viewHolder.fillAsDropDown(item, item == selectedItem)
         }
     }
+
 
     protected fun getViewFromResource(
         layoutResId: Int,
@@ -112,6 +119,7 @@ abstract class ListHoldingListAdapter<T, V: ListHoldingListAdapter.ViewHolder<T>
     companion object {
         val TAG = ListHoldingListAdapter::class.java.simpleName
     }
+
 
     abstract class ViewHolder<ItemType> {
         abstract fun init(itemView: View)

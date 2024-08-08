@@ -122,8 +122,13 @@ abstract class ListHoldingListAdapter<T, V: ListHoldingListAdapter.ViewHolder<T>
 
 
     abstract class ViewHolder<ItemType> {
+
         abstract fun init(itemView: View)
+
         abstract fun fill(item: ItemType, isSelected: Boolean = false)
-        abstract fun fillAsDropDown(item: ItemType, isSelected: Boolean = false)
+
+        fun fillAsDropDown(item: ItemType, isSelected: Boolean = false) {
+            return fill(item, isSelected)
+        }
     }
 }
